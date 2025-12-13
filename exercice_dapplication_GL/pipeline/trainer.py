@@ -1,23 +1,28 @@
-from core.dataset import PatientDataset
-from core.logistic_regression import LogisticRegressionModel
+import sys
+import os
 
-class Trainer:
-    def __init__(self, data_path):
-        self.dataset = PatientDataset(data_path)
-        self.model = LogisticRegressionModel()
+# Ajout du chemin racine du projet pour permettre les imports
+# si le script est exécuté directement (python pipeline/trainer.py)
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-    def train_model(self):
-        # 1. charger les données
-        self.dataset.load()
-        # 2. séparer X (features) et y (labels)
-        X, y = self.dataset.get_features_and_labels()
-        # 3. entraîner le modèle
-        self.model.train(X, y)
-        # 4. retourner le modèle entraîné
-        return self.model
+from pipeline.builder import VirusModelBuilder
 
+def main():
+    # Construction du système avec le Builder
+    builder = VirusModelBuilder()
+    
+    system = (
+        builder
+        .set_data_path("data/patients_infectes.csv")
+        .load_data()
+        .train_model()
+        .get_system()
+    )
+
+    print("✅ Modèle entraîné avec succès via le Builder !")
+    print("Test de diagnostic pour un patient (38°C, 12 tension, toux=1)...")
+    result = system.diagnose([38.0, 12.0, 1])
+    print(f"Résultat du diagnostic : {result}")
 
 if __name__ == "__main__":
-    trainer = Trainer("data/patients.csv")
-    trained_model = trainer.train_model()
-    print("✅ Modèle entraîné avec succès !")
+    main()
