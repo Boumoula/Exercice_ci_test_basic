@@ -11,11 +11,17 @@ Ce projet met en place une intégration continue (CI) à l’aide de GitHub Acti
 
 ## Structure du projet
 Exercice_ci_test_basic/
+
 ├── .github/workflows/
+
 ├── exercice_dapplication_GL/
+
 ├── train_random_forest_infecte.py
+
 ├── test_model.py
+
 ├── random_forest_infecte.pkl
+
 └── README.md
 
 
